@@ -33,11 +33,25 @@ It wrote the code, ran away, and now the game is unplayable.
 
 Describe your fixed game in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+- Setup
+1. Run the application
+2. Click on the debugger dropdown
+3. Click the "New Game" button until the secret value is between 30 - 60
+
+- Demo
+1. User enters 22 in the "Enter your guess" field
+2. User clicks the enter key on their keyboard
+3. User clicks "Submit Guess"
+4. Game responds with "Go HIGHER!"
+5. User enters 88 in the "Enter your guess" field
+6. User clicks the enter key on their keyboard
+7. User clicks "Submit Guess"
+8. Game responds with "Go LOWER!"
+9. User guesses the secret number
+10. Game responds with "Winner!", a balloon animation, & the user's score
+11. User clicks the "New Game" button
+12. Game resets the number of attempts, the score, and the history
+
 
 **Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
 

@@ -60,6 +60,10 @@ Each test would mock an object, set the values directly on the mocked object, an
 None of this relied on any of the production code, offering no safegaurds or quality assurance.
 I ultimately removed these tests as they provided no value.
 
+On the code side, it sometimes suggested code changes that led to errors.
+Even after prompting differently, it continued to offer the same suggestion.
+I most likely need to change my prompting strategy more drastically when given incorrect results.
+
 ---
 
 ## 3. Debugging and testing your fixes
@@ -87,13 +91,36 @@ It also updated the test configuration so that it would seamlessly work with the
 
 ## 4. What did you learn about Streamlit and state?
 
-- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+I learned that streamlit is a pretty quick UI builder with simple state management. 
+It offers built in capabilities for rendering UI components and accessing user input.
+
+> How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+
+Streamlit "reruns" is similar to a recompile. 
+It reruns the underlying application with the current code.
+
+Session state is the temporary memory store of what the user has done within this browser session.
+It is a small cache of values accessible globally within the application through the Streamlit object.
 
 ---
 
 ## 5. Looking ahead: your developer habits
 
-- What is one habit or strategy from this project that you want to reuse in future labs or projects?
-  - This could be a testing habit, a prompting strategy, or a way you used Git.
-- What is one thing you would do differently next time you work with AI on a coding task?
-- In one or two sentences, describe how this project changed the way you think about AI generated code.
+> What is one habit or strategy from this project that you want to reuse in future labs or projects?
+  > - This could be a testing habit, a prompting strategy, or a way you used Git.
+
+I appreciated using Claude for automation writing.
+Mocking data can sometimes be a painful process when I know what I want mocked but cannot remember the exact syntax.
+I plan on continuing to use Claude as an automator.
+
+
+> What is one thing you would do differently next time you work with AI on a coding task?
+
+One thing I'd do differently next time is be quicker to use new agents.
+I tried steering Claude back when it would make incorrect suggestions rather than starting a new chat.
+Next time, I plan on being quicker to abandon a chat.
+
+> In one or two sentences, describe how this project changed the way you think about AI generated code.
+
+This project helped me see Claude as a collaborator in the coding process rather than a code robot.
+I think this has a lot to do with asking for explanations throughout and keeping the problems it would fix minimal.
