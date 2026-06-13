@@ -45,3 +45,16 @@ def reset_game():
     st.session_state.status = "playing"
     low, high = get_range_for_difficulty(st.session_state.difficulty)
     st.session_state.secret = random.randint(low, high)
+
+
+def get_and_clear_hint():
+    """Get stored hint message and clear it."""
+    hint = st.session_state.get("pending_hint", None)
+    if hint:
+        st.session_state.pending_hint = None
+    return hint
+
+
+def set_hint(message):
+    """Store hint message for display after rerun."""
+    st.session_state.pending_hint = message

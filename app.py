@@ -14,6 +14,8 @@ from state_utils import (
     can_submit,
     initialize_game_state,
     reset_game,
+    get_and_clear_hint,
+    set_hint,
 )
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
@@ -86,6 +88,10 @@ with col_main:
         f"Attempts left: {attempt_limit - st.session_state.attempts}"
     )
 
+    hint = get_and_clear_hint()
+    if hint:
+        st.warning(hint)
+
     raw_guess = st.text_input(
         "Enter your guess:",
         key=f"guess_input_{difficulty}"
@@ -104,8 +110,6 @@ with col_main:
         st.success("New game started.")
         st.rerun()
     
-    print(f'status: {st.session_state.status}')
-
     if debug_mode and col_debug:
         with col_debug:
             st.subheader("🖥️ DEBUG")
@@ -138,7 +142,7 @@ with col_main:
             outcome, message = check_guess(guess_int, secret)
 
             if show_hint:
-                st.warning(message)
+                set_hint(message)
 
             st.session_state.score = update_score(
                 current_score=st.session_state.score,
