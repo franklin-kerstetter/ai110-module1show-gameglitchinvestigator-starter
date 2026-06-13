@@ -58,3 +58,16 @@ def get_and_clear_hint():
 def set_hint(message):
     """Store hint message for display after rerun."""
     st.session_state.pending_hint = message
+
+
+def get_and_clear_error():
+    """Get stored error message and clear it."""
+    error = st.session_state.get("pending_error", None)
+    if error:
+        st.session_state.pending_error = None
+    return error
+
+
+def set_error(message):
+    """Store error message for display after rerun."""
+    st.session_state.pending_error = message

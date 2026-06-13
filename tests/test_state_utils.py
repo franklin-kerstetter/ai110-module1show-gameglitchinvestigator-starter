@@ -15,6 +15,8 @@ from state_utils import (
     reset_game,
     get_and_clear_hint,
     set_hint,
+    get_and_clear_error,
+    set_error,
 )
 
 
@@ -264,3 +266,50 @@ class TestHintManagement:
         # Second retrieval returns None
         hint = get_and_clear_hint()
         assert hint is None
+
+
+class TestErrorManagement:
+    """Tests for error storage and retrieval functions."""
+
+    def test_set_error_stores_message(self, mock_st):
+        set_error("That is not a number.")
+
+        assert mock_st.session_state.pending_error == "That is not a number."
+
+    def test_get_and_clear_error_returns_error(self, mock_st):
+        mock_st.session_state.pending_error = "Invalid input"
+
+        error = get_and_clear_error()
+
+        assert error == "Invalid input"
+        assert mock_st.session_state.pending_error is None
+
+    def test_get_and_clear_error_no_error(self, mock_st):
+        error = get_and_clear_error()
+
+        assert error is None
+
+    def test_get_and_clear_error_none_value(self, mock_st):
+        mock_st.session_state.pending_error = None
+
+        error = get_and_clear_error()
+
+        assert error is None
+        assert mock_st.session_state.pending_error is None
+
+    def test_error_lifecycle(self, mock_st):
+        """Test full error storage and retrieval cycle."""
+        # Store error
+        set_error("Enter a guess.")
+        assert mock_st.session_state.pending_error == "Enter a guess."
+
+        # Retrieve error
+        error = get_and_clear_error()
+        assert error == "Enter a guess."
+
+        # Verify cleared
+        assert mock_st.session_state.pending_error is None
+
+        # Second retrieval returns None
+        error = get_and_clear_error()
+        assert error is None

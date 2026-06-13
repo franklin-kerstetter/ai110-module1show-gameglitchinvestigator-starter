@@ -16,6 +16,8 @@ from state_utils import (
     reset_game,
     get_and_clear_hint,
     set_hint,
+    get_and_clear_error,
+    set_error,
 )
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
@@ -92,6 +94,10 @@ with col_main:
     if hint:
         st.warning(hint)
 
+    error = get_and_clear_error()
+    if error:
+        st.error(error)
+
     raw_guess = st.text_input(
         "Enter your guess:",
         key=f"guess_input_{difficulty}"
@@ -124,14 +130,12 @@ with col_main:
         st.stop()
 
     if submit:
-        st.session_state.attempts += 1
-
         ok, guess_int, err = parse_guess(raw_guess)
 
         if not ok:
-            st.session_state.history.append(raw_guess)
-            st.error(err)
+            set_error(err)
         else:
+            st.session_state.attempts += 1
             st.session_state.history.append(guess_int)
 
             if st.session_state.attempts % 2 == 0:
