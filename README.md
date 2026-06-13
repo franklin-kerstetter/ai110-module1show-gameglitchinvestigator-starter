@@ -35,8 +35,9 @@ Describe your fixed game in numbered steps so a reader can follow along without 
 
 - Setup
 1. Run the application
-2. Click on the debugger dropdown
+2. Enable the debugger toggle
 3. Click the "New Game" button until the secret value is between 30 - 60
+4. Disable debug mode
 
 - Demo
 1. User enters 22 in the "Enter your guess" field
@@ -51,17 +52,27 @@ Describe your fixed game in numbered steps so a reader can follow along without 
 10. Game responds with "Winner!", a balloon animation, & the user's score
 11. User clicks the "New Game" button
 12. Game resets the number of attempts, the score, and the history
+13. User updates the appearance to `Groovy` 
+13. User updates the appearance to `Color-Blind` 
 
-**Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
 
 ## 🧪 Test Results
 
 ```
-tests/test_game_logic.py ..........................                                                                                                               [100%]
+tests/test_game_logic.py ..........................                                                                                        [ 49%]
+tests/test_state_utils.py ...........................                                                                                      [100%]
 
-========================================================================== 26 passed in 0.03s ===========================================================================
+=============================================================== 53 passed in 0.04s ===============================================================
 ```
 
 ## 🚀 Stretch Features
 
-- [ ] [If you choose to complete Challenge 4, describe the Enhanced UI changes here — a screenshot is optional]
+> [X] [If you choose to complete Challenge 4, describe the Enhanced UI changes here — a screenshot is optional]
+
+I added game styling options!
+Users can now select from 3 different game appearances with a 4th "Hacker" style that enables when in debug mode.
+
+Related to this, I hid the debug information behind a toggle in the left column rather than always present as an expander widget.
+This toggle will enable the new styling and display the debug info in a column layout rather than as a long list.
+
+As for relevant functions, there is an entirely new [styles.py](styles.py) file containing the CSS and style selection functions.
