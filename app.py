@@ -1,3 +1,4 @@
+import json
 import random
 import streamlit as st
 from logic_utils import (
@@ -143,6 +144,8 @@ with col_main:
                         f"Score: {st.session_state.score}"
                     )
 
+        st.rerun()
+
 if debug_mode and col_debug:
     with col_debug:
         st.subheader("🖥️ DEBUG")
@@ -150,7 +153,7 @@ if debug_mode and col_debug:
         st.write("Attempts:", st.session_state.attempts)
         st.write("Score:", st.session_state.score)
         st.write("Difficulty:", difficulty)
-        st.write("History:", st.session_state.history)
+        st.write("History:", json.dumps(st.session_state.history))
 
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")
