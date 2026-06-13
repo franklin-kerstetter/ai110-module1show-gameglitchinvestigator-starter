@@ -9,12 +9,12 @@ class TestCheckGuess:
         "guess,secret,expected_outcome,expected_message",
         [
             (50, 50, "Win", "🎉 Correct!"),
-            (60, 50, "Too High", "📉 Go LOWER!"),
-            (40, 50, "Too Low", "📈 Go HIGHER!"),
+            (60, 50, "Too High", "📉 Go LOWER than 60!"),
+            (40, 50, "Too Low", "📈 Go HIGHER than 40!"),
             (50, "50", "Win", "🎉 Correct!"),
-            (60, "50", "Too High", "📉 Go LOWER!"),
-            (40, "50", "Too Low", "📈 Go HIGHER!"),
-            (999999, 50, "Too High", "📉 Go LOWER!"),
+            (60, "50", "Too High", "📉 Go LOWER than 60!"),
+            (40, "50", "Too Low", "📈 Go HIGHER than 40!"),
+            (999999, 50, "Too High", "📉 Go LOWER than 999999!"),
         ],
     )
     def test_check_guess(self, guess, secret, expected_outcome, expected_message):

@@ -78,6 +78,7 @@ def check_guess(guess: int, secret: int) -> tuple:
 
     Handles both numeric and string comparisons, attempting numeric comparison
     first before falling back to string comparison for type-mismatched inputs.
+    Incorrect guesses show the guessed value for reference.
 
     Args:
         guess: The user's guess as an int or numeric value.
@@ -88,33 +89,33 @@ def check_guess(guess: int, secret: int) -> tuple:
             - outcome (str): One of "Win", "Too High", or "Too Low".
             - message (str): A user-friendly emoji-enhanced feedback message:
               * "🎉 Correct!" for Win
-              * "📉 Go LOWER!" for Too High
-              * "📈 Go HIGHER!" for Too Low
+              * "📉 Go LOWER than {guess}!" for Too High
+              * "📈 Go HIGHER than {guess}!" for Too Low
 
     Examples:
         >>> check_guess(42, 42)
         ("Win", "🎉 Correct!")
         >>> check_guess(50, 42)
-        ("Too High", "📉 Go LOWER!")
+        ("Too High", "📉 Go LOWER than 50!")
         >>> check_guess(30, 42)
-        ("Too Low", "📈 Go HIGHER!")
+        ("Too Low", "📈 Go HIGHER than 30!")
     """
     if guess == secret:
         return "Win", "🎉 Correct!"
 
     try:
         if guess > secret:
-            return "Too High", "📉 Go LOWER!"
+            return "Too High", f"📉 Go LOWER than {guess}!"
         else:
-            return "Too Low", "📈 Go HIGHER!"
+            return "Too Low", f"📈 Go HIGHER than {guess}!"
     except TypeError:
         g = str(guess)
         if g == secret:
             return "Win", "🎉 Correct!"
         if g > secret:
-            return "Too High", "📉 Go LOWER!"
+            return "Too High", f"📉 Go LOWER than {g}!"
         else:
-            return "Too Low", "📈 Go HIGHER!"
+            return "Too Low", f"📈 Go HIGHER than {g}!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int) -> int:
