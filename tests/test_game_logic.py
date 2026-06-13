@@ -14,6 +14,7 @@ class TestCheckGuess:
             (50, "50", "Win", "🎉 Correct!"),
             (60, "50", "Too High", "📉 Go LOWER!"),
             (40, "50", "Too Low", "📈 Go HIGHER!"),
+            (999999, 50, "Too High", "📉 Go LOWER!"),
         ],
     )
     def test_check_guess(self, guess, secret, expected_outcome, expected_message):
