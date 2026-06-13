@@ -18,7 +18,7 @@ After loading the application, I immediately noticed several issues.
 
 4. Submitting a blank guess only correctly prevents submission the first time. For all subsequent submissions, the attempts counter increases and the submission is added as "" to the history log. At all times, the "Enter a guess" warning is present. I expected all blank submissions to be ignored and for the banner to be displayed.
 
-5. The hints are reveresed. Any guess lower than "secret" is guided lower while any guess higher is guided higher. I expected the hints to be accurate and guide me towards the target value.
+5. The hints are reversed. Any guess lower than "secret" is guided lower while any guess higher is guided higher. I expected the hints to be accurate and guide me towards the target value.
 
 6. The "new game" button would reselect a secret value in the 1 to 100 range regardless of the range configured by the game's supposed difficulty.
 
@@ -28,7 +28,7 @@ After loading the application, I immediately noticed several issues.
 
 | Input | Expected Behavior | Actual Behavior | Console Output / Error |
 |-------|-------------------|-----------------|------------------------|
-| Leave the guess blank and click "Submit Guess" twice | The "Enter a guess" banner is displayed and the game does not progress for any submission. | The game progresses on the 2nd submission (for any submission after the first). | No console error.|
+| Leave the guess blank and click "Submit Guess" twice | The "Enter a guess" banner is displayed and the game does not progress for any submission. | The game progresses on the 2nd submission (or any submission after the first). | No console error.|
 | Change the game's difficulty setting from Normal to Easy. | A new game should be started with a secret value in the appropriate range. | The current game continues with only total attempts changed. | No console error.|
 | Set the game difficult to "Easy" and click "New Game" until a number larger than 20 appears (usually less than 5 times). | The game's difficult range should dictate the range allowed for the secret value. | The secret value always exists in the 1 to 100 range. | No console error.|
 | Load the application. | The game should load with attempts as 0. | The game loads initially with 1 attempt already having been completed. | No console error. |
@@ -45,7 +45,8 @@ I used Anthropic's Claude Code for the code updates and Google's Gemini to answe
 
 One of the main problems I fixed was around the game hints offered to users based on their guess. 
 Claude suggested swapping the returned help text such that the "higher" was when the guess was too low and the "lower" was when the guess was too high.
-This suggestion was both helpful and correct.
+This suggestion was both helpful and correct: swapping the response text values.
+
 I verified the change a couple of ways. 
 First, I carefully read the suggestion, verifying what it was doing. 
 Second, I asked for tests of the various cases which I also verified were correct. 
@@ -57,8 +58,9 @@ Another problem I fixed was around the state management.
 While Claude's code suggestion was correct, the tests it suggested were not.
 The tests it wrote didn't actually test anything useful.
 Each test would mock an object, set the values directly on the mocked object, and verify the values.
-None of this relied on any of the production code, offering no safegaurds or quality assurance.
+None of this relied on any of the production code, offering no safeguards or quality assurance.
 I ultimately removed these tests as they provided no value.
+I later added state utility functions where the automation Claude suggested did provide some necessary assurance.
 
 On the code side, it sometimes suggested code changes that led to errors.
 Even after prompting differently, it continued to offer the same suggestion.
@@ -80,6 +82,8 @@ Since I fixed the state initialization around the attempt number, it was immedia
 This test demonstrated that my fix had been correct.
 
 One step further, I verified the rest of the state management changes by adjusting the difficulty setting and checking that the history and attempts were cleared.
+This demonstrated that my code's state management was more correct than before.
+Evaluating overall correctness required more manual and automated testing.
 
 > Did AI help you design or understand any tests? How?
 
@@ -95,8 +99,10 @@ It offers built in capabilities for rendering UI components and accessing user i
 
 > How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
 
-Streamlit "reruns" is similar to a recompile. 
-It reruns the underlying application with the current code.
+Streamlit "reruns" is similar to a recompile in that it reruns the screen state with the current code.
+One notable aspect is that state isn't refreshed across reruns.
+This became particularly handy when handling incorrectly updating values.
+Using rerun allowed for a complete rerendering with the updated state values.
 
 Session state is the temporary memory store of what the user has done within this browser session.
 It is a small cache of values accessible globally within the application through the Streamlit object.
@@ -121,4 +127,4 @@ Next time, I plan on being quicker to abandon a chat.
 > In one or two sentences, describe how this project changed the way you think about AI generated code.
 
 This project helped me see Claude as a collaborator in the coding process rather than a code robot.
-I think this has a lot to do with asking for explanations throughout and keeping the problems it would fix minimal.
+Like with any collaboration, it's important to double check the work as it's not always perfect on the first try.
