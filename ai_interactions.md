@@ -28,9 +28,8 @@
 
 | Edge Case | Prompt Used | AI-Suggested Test | Did It Pass? | Your Reasoning |
 |-----------|-------------|-------------------|--------------|----------------|
-| | | | | |
-| | | | | |
-| | | | | |
+| General edge case testing| Add automation around the central logic in app.py ensuring to cover edge cases | It basically built all the tests in the current file excluding the final large value case | No. I needed to add a follow-up to specify making the automation compliant with `pytest` | |
+| Large value inputs | Add a test case for a large value user input | Test with `999999` as the user input | Yes | I noticed that this large value input case wasn't originally covered but was called out in the docs. It was worth adding for compeleteness. |
 
 ---
 
