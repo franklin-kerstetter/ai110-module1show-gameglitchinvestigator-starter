@@ -1,27 +1,5 @@
 # AI Interactions Log
 
-> **Stretch features only.** Only fill in the sections that apply to stretch features you attempted. If you did not attempt a stretch feature, leave its section blank or delete it. This file is not required for the core project.
-
----
-
-## Agent Workflow (SF8)
-
-> Document your experience using an AI agent (e.g., Cursor Agent, Claude, Copilot) to make multi-step changes autonomously.
-
-**What task did you give the agent?**
-
-<!-- Describe the goal you asked the agent to accomplish -->
-
-**What did the agent do?**
-
-<!-- List the steps the agent took (files edited, commands run, etc.) -->
-
-**What did you have to verify or fix manually?**
-
-<!-- Describe anything the agent got wrong or that required human review -->
-
----
-
 ## Test Generation (SF7)
 
 > Document how you used AI to help generate or improve tests.
@@ -44,36 +22,40 @@ If these expectations were not met, I'd ask for additional automation.
 **Prompt used:**
 
 ```
-<!-- Paste the prompt you gave the AI -->
+Add professional-grade docstrings to every function in @Game_Glitch_Investigator/logic_utils.py
+```
+
+After applying the docstrings given, I used the following prompt
+
+```
+Review my code for PEP 8 style compliance
 ```
 
 **Linting output before:**
 
 ```
-<!-- Paste relevant linter warnings/errors -->
+PEP 8 issues found:
+
+Critical:
+
+Missing return type hints — Lines 2, 26, 71, 116. Functions should declare return types:
+
+
+def get_range_for_difficulty(difficulty: str) -> tuple:
+def parse_guess(raw: str) -> tuple:
+def check_guess(guess, secret) -> tuple:
+def update_score(current_score: int, outcome: str, attempt_number: int) -> int:
+Missing parameter type hints — Line 71. check_guess needs types:
+
+
+def check_guess(guess: int, secret: int) -> tuple:
+Blank line spacing — Line 24. Only one blank line between get_range_for_difficulty() and parse_guess(). PEP 8 requires two blank lines between top-level functions.
+
+Minor:
+
+Missing module docstring — File should start with a docstring describing the module's purpose.
 ```
 
 **Changes applied:**
 
-<!-- Describe what you changed based on the AI's suggestions -->
-
----
-
-## Model Comparison (SF11)
-
-> Compare two AI models on the same task.
-
-**Task given to both models:**
-
-<!-- Describe what you asked each model to do -->
-
-| | Model A | Model B |
-|-|---------|---------|
-| **Model name** | | |
-| **Response summary** | | |
-| **More Pythonic?** | | |
-| **Clearer explanation?** | | |
-
-**Which did you prefer and why?**
-
-<!-- Your conclusion -->
+I agreed with and accepted all of Claude's proposed changes: adding a docstring to the top of [logic_utils.py](logic_utils.py), adding return type hints, adding parameter type hints, and normalizing the spacing between functions.
