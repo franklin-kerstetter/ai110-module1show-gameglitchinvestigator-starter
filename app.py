@@ -1,5 +1,4 @@
 import json
-import random
 import streamlit as st
 from logic_utils import (
     check_guess,
@@ -8,6 +7,14 @@ from logic_utils import (
     update_score,
 )
 from styles import get_theme_css
+from state_utils import (
+    is_game_won,
+    is_game_lost,
+    is_game_over,
+    can_submit,
+    initialize_game_state,
+    reset_game,
+)
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
@@ -46,26 +53,19 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
-# FIX: AI Agent added difficulty state management and consolidated state initialization
-if "difficulty" not in st.session_state or st.session_state.difficulty != difficulty:
-    st.session_state.difficulty = difficulty
-    st.session_state.secret = random.randint(low, high)
-    st.session_state.attempts = 0
-    st.session_state.score = 0
-    st.session_state.status = "playing"
-    st.session_state.history = []
+initialize_game_state(difficulty, attempt_limit_map)
 
 st.markdown(get_theme_css(appearance), unsafe_allow_html=True)
 
 # Display win/loss results
-if st.session_state.status == "won":
+if is_game_won():
     st.balloons()
     st.success(
         f"You won! The secret was {st.session_state.secret}. "
         f"Final score: {st.session_state.score}"
     )
 
-if st.session_state.status == "lost":
+if is_game_lost():
     st.error(
         f"Out of attempts! "
         f"The secret was {st.session_state.secret}. "
@@ -93,19 +93,14 @@ with col_main:
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        submit = st.button("Submit Guess 🚀", disabled=(attempt_limit - st.session_state.attempts) <= 0 or st.session_state.status != 'playing')
+        submit = st.button("Submit Guess 🚀", disabled=not can_submit(attempt_limit))
     with col2:
         new_game = st.button("New Game 🔁")
     with col3:
         show_hint = st.checkbox("Show hint", value=True)
 
     if new_game:
-        st.session_state.attempts = 0
-        st.session_state.history = []
-        st.session_state.score = 0
-        st.session_state.status = "playing"
-        low, high = get_range_for_difficulty(st.session_state.difficulty)
-        st.session_state.secret = random.randint(low, high)
+        reset_game()
         st.success("New game started.")
         st.rerun()
     
@@ -120,7 +115,7 @@ with col_main:
             st.write("Difficulty:", difficulty)
             st.write("History:", json.dumps(st.session_state.history))
 
-    if st.session_state.status != "playing":
+    if is_game_over():
         st.info("Start a new game to play again.")
         st.stop()
 
