@@ -52,7 +52,6 @@ Describe your fixed game in numbered steps so a reader can follow along without 
 11. User clicks the "New Game" button
 12. Game resets the number of attempts, the score, and the history
 
-
 **Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
 
 ## 🧪 Test Results

@@ -75,7 +75,6 @@ I did also run the application, but that was only after the automation was passi
 
 > Describe at least one test you ran (manual or using pytest) and what it showed you about your code.
 
-
 The simplest manual test I ran was loading the application.
 Since I fixed the state initialization around the attempt number, it was immediately apparent if this was resolved or not.
 This test demonstrated that my fix had been correct.
@@ -112,7 +111,6 @@ It is a small cache of values accessible globally within the application through
 I appreciated using Claude for automation writing.
 Mocking data can sometimes be a painful process when I know what I want mocked but cannot remember the exact syntax.
 I plan on continuing to use Claude as an automator.
-
 
 > What is one thing you would do differently next time you work with AI on a coding task?
 
