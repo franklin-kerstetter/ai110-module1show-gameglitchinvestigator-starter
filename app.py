@@ -32,6 +32,8 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
+debug_mode = st.sidebar.toggle("🔧 Debug Mode", value=False)
+
 # FIX: AI Agent added difficulty state management and consolidated state initialization
 if "difficulty" not in st.session_state or st.session_state.difficulty != difficulty:
     st.session_state.difficulty = difficulty
@@ -41,6 +43,50 @@ if "difficulty" not in st.session_state or st.session_state.difficulty != diffic
     st.session_state.status = "playing"
     st.session_state.history = []
 
+if debug_mode:
+    st.markdown("""
+    <style>
+    body, .main, .stApp {
+        background-color: #0a0e27 !important;
+        color: #00ff00 !important;
+    }
+    .stMarkdown, .stWrite, p {
+        color: #00ff00 !important;
+    }
+    .stExpander > div:first-child {
+        background-color: #1a1f3a !important;
+        border: 1px solid #00ff00 !important;
+        color: #00ff00 !important;
+    }
+    .stExpanderContent {
+        background-color: #0a0e27 !important;
+        border: 1px solid #00ff00 !important;
+    }
+    .stTextInput > div > div > input {
+        background-color: #1a1f3a !important;
+        color: #00ff00 !important;
+        border: 1px solid #00ff00 !important;
+    }
+    .stButton > button {
+        background-color: #1a1f3a !important;
+        color: #00ff00 !important;
+        border: 1px solid #00ff00 !important;
+    }
+    .stButton > button:hover {
+        background-color: #00ff00 !important;
+        color: #0a0e27 !important;
+    }
+    .stCheckbox > label {
+        color: #00ff00 !important;
+    }
+    .stInfo, .stSuccess, .stWarning, .stError {
+        background-color: #1a1f3a !important;
+        border: 1px solid #00ff00 !important;
+        color: #00ff00 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 st.subheader("Make a guess")
 
 st.info(
@@ -48,12 +94,13 @@ st.info(
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
 
-with st.expander("Developer Debug Info"):
-    st.write("Secret:", st.session_state.secret)
-    st.write("Attempts:", st.session_state.attempts)
-    st.write("Score:", st.session_state.score)
-    st.write("Difficulty:", difficulty)
-    st.write("History:", st.session_state.history)
+if debug_mode:
+    with st.expander("🖥️ DEBUG CONSOLE"):
+        st.write("Secret:", st.session_state.secret)
+        st.write("Attempts:", st.session_state.attempts)
+        st.write("Score:", st.session_state.score)
+        st.write("Difficulty:", difficulty)
+        st.write("History:", st.session_state.history)
 
 raw_guess = st.text_input(
     "Enter your guess:",
