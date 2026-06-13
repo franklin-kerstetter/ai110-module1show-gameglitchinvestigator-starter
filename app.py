@@ -57,6 +57,21 @@ if "difficulty" not in st.session_state or st.session_state.difficulty != diffic
 
 st.markdown(get_theme_css(appearance), unsafe_allow_html=True)
 
+# Display win/loss results
+if st.session_state.status == "won":
+    st.balloons()
+    st.success(
+        f"You won! The secret was {st.session_state.secret}. "
+        f"Final score: {st.session_state.score}"
+    )
+
+if st.session_state.status == "lost":
+    st.error(
+        f"Out of attempts! "
+        f"The secret was {st.session_state.secret}. "
+        f"Score: {st.session_state.score}"
+    )
+
 if debug_mode:
     col_main, col_debug = st.columns([2, 1])
 else:
@@ -78,7 +93,7 @@ with col_main:
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        submit = st.button("Submit Guess 🚀")
+        submit = st.button("Submit Guess 🚀", disabled=(attempt_limit - st.session_state.attempts) <= 0 or st.session_state.status != 'playing')
     with col2:
         new_game = st.button("New Game 🔁")
     with col3:
@@ -93,12 +108,20 @@ with col_main:
         st.session_state.secret = random.randint(low, high)
         st.success("New game started.")
         st.rerun()
+    
+    print(f'status: {st.session_state.status}')
+
+    if debug_mode and col_debug:
+        with col_debug:
+            st.subheader("🖥️ DEBUG")
+            st.write("Secret:", st.session_state.secret)
+            st.write("Attempts:", st.session_state.attempts)
+            st.write("Score:", st.session_state.score)
+            st.write("Difficulty:", difficulty)
+            st.write("History:", json.dumps(st.session_state.history))
 
     if st.session_state.status != "playing":
-        if st.session_state.status == "won":
-            st.success("You already won. Start a new game to play again.")
-        else:
-            st.error("Game over. Start a new game to try again.")
+        st.info("Start a new game to play again.")
         st.stop()
 
     if submit:
@@ -129,31 +152,11 @@ with col_main:
             )
 
             if outcome == "Win":
-                st.balloons()
                 st.session_state.status = "won"
-                st.success(
-                    f"You won! The secret was {st.session_state.secret}. "
-                    f"Final score: {st.session_state.score}"
-                )
-            else:
-                if st.session_state.attempts >= attempt_limit:
-                    st.session_state.status = "lost"
-                    st.error(
-                        f"Out of attempts! "
-                        f"The secret was {st.session_state.secret}. "
-                        f"Score: {st.session_state.score}"
-                    )
+            elif st.session_state.attempts >= attempt_limit:
+                st.session_state.status = "lost"
 
         st.rerun()
-
-if debug_mode and col_debug:
-    with col_debug:
-        st.subheader("🖥️ DEBUG")
-        st.write("Secret:", st.session_state.secret)
-        st.write("Attempts:", st.session_state.attempts)
-        st.write("Score:", st.session_state.score)
-        st.write("Difficulty:", difficulty)
-        st.write("History:", json.dumps(st.session_state.history))
 
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")
