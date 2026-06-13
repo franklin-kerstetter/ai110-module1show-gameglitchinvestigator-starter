@@ -6,6 +6,7 @@ from logic_utils import (
     parse_guess,
     update_score,
 )
+from styles import get_theme_css
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
@@ -13,6 +14,18 @@ st.title("🎮 Game Glitch Investigator")
 st.caption("An AI-generated guessing game. Something is off.")
 
 st.sidebar.header("Settings")
+
+debug_mode = st.sidebar.toggle("🔧 Debug Mode", value=False)
+
+if debug_mode:
+    st.sidebar.write("Appearance: Hacker")
+    appearance = "Hacker"
+else:
+    appearance = st.sidebar.selectbox(
+        "Appearance",
+        ["Classic", "Groovy", "Color-Blind"],
+        index=0,
+    )
 
 difficulty = st.sidebar.selectbox(
     "Difficulty",
@@ -32,8 +45,6 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
-debug_mode = st.sidebar.toggle("🔧 Debug Mode", value=False)
-
 # FIX: AI Agent added difficulty state management and consolidated state initialization
 if "difficulty" not in st.session_state or st.session_state.difficulty != difficulty:
     st.session_state.difficulty = difficulty
@@ -43,49 +54,7 @@ if "difficulty" not in st.session_state or st.session_state.difficulty != diffic
     st.session_state.status = "playing"
     st.session_state.history = []
 
-if debug_mode:
-    st.markdown("""
-    <style>
-    body, .main, .stApp {
-        background-color: #0a0e27 !important;
-        color: #00ff00 !important;
-    }
-    .stMarkdown, .stWrite, p {
-        color: #00ff00 !important;
-    }
-    .stExpander > div:first-child {
-        background-color: #1a1f3a !important;
-        border: 1px solid #00ff00 !important;
-        color: #00ff00 !important;
-    }
-    .stExpanderContent {
-        background-color: #0a0e27 !important;
-        border: 1px solid #00ff00 !important;
-    }
-    .stTextInput > div > div > input {
-        background-color: #1a1f3a !important;
-        color: #00ff00 !important;
-        border: 1px solid #00ff00 !important;
-    }
-    .stButton > button {
-        background-color: #1a1f3a !important;
-        color: #00ff00 !important;
-        border: 1px solid #00ff00 !important;
-    }
-    .stButton > button:hover {
-        background-color: #00ff00 !important;
-        color: #0a0e27 !important;
-    }
-    .stCheckbox > label {
-        color: #00ff00 !important;
-    }
-    .stInfo, .stSuccess, .stWarning, .stError {
-        background-color: #1a1f3a !important;
-        border: 1px solid #00ff00 !important;
-        color: #00ff00 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+st.markdown(get_theme_css(appearance), unsafe_allow_html=True)
 
 st.subheader("Make a guess")
 
