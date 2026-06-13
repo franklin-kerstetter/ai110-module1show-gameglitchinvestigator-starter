@@ -4,9 +4,16 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 
 ## 1. What was broken when you started?
 
-<!-- - What did the game look like the first time you ran it? -->
-<!-- - List at least two concrete bugs you noticed at the start   -->
-  <!-- (for example: "the hints were backwards"). -->
+Evidence of running the application
+```
+(.venv) (base) ➜  Game_Glitch_Investigator git:(main) ✗ python -m streamlit run app.py
+2026-06-13 14:44:32.817 Uvicorn server started on 0.0.0.0:8501
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://[IP address removed]:8501
+```
 
 After loading the application, I immediately noticed several issues. 
 
