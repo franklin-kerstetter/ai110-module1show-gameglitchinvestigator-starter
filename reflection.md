@@ -50,28 +50,69 @@ I used Anthropic's Claude Code for the code updates and Google's Gemini to answe
 
 > Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
 
-One of the main problems I fixed was around the game hints offered to users based on their guess. 
-Claude suggested swapping the returned help text such that the "higher" was when the guess was too low and the "lower" was when the guess was too high.
-This suggestion was both helpful and correct: swapping the response text values.
+One of the problems I fixed was around the game initializating with 1 attempt already being used.
 
-I verified the change a couple of ways. 
-First, I carefully read the suggestion, verifying what it was doing. 
-Second, I asked for tests of the various cases which I also verified were correct. 
-Finally, I ran the generated tests and the application.
+**Prompt**
+```
+Explain the bug of initializing attempts with 1 used
+```
+
+**Output**
+```
+Bug at app.py:96. Initialize attempts = 1 means first guess counts as second attempt.
+
+What happens:
+
+Game starts: attempts = 1 (bug — one "used" before any guess)
+Player submits first guess → attempts += 1 → attempts = 2
+Display shows "Attempts left: 6" (if limit 8) instead of "7"
+Score calc uses attempt_number = 2 for first real guess, so win points are 100 - 10 * (2+1) = 70 instead of 100 - 10 * (1+1) = 80
+Fix: Initialize to 0.
+
+
+st.session_state.attempts = 0  # Line 96
+This way: first guess → attempts = 1 (correct), display shows correct remaining attempts, scoring works right.
+```
+I verified this was correct by first understanding the code implementation.
+With the output as a starting point, I read through the code to understand what was happening and what the intention was.
+Evaluating this against the AI output led me to applying the suggested fix.
+From there, I tested it through manual verification: reloading the application and checking the initialized state.
 
 > Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
 
-Another problem I fixed was around the state management.
-While Claude's code suggestion was correct, the tests it suggested were not.
-The tests it wrote didn't actually test anything useful.
+Another problem I fixed was around the state management automation.
+While Claude's code suggestion was correct, the tests it wrote were not because they didn't actually test anything useful.
 Each test would mock an object, set the values directly on the mocked object, and verify the values.
 None of this relied on any of the production code, offering no safeguards or quality assurance.
 I ultimately removed these tests as they provided no value.
 I later added state utility functions where the automation Claude suggested did provide some necessary assurance.
 
-On the code side, it sometimes suggested code changes that led to errors.
-Even after prompting differently, it continued to offer the same suggestion.
-I most likely need to change my prompting strategy more drastically when given incorrect results.
+As a more concrete example, one attempt to add automation led Claude down an unintended refactoring pathway.
+
+**Prompt**
+```
+Automate the state management logic, ensuring to cover edge cases
+```
+
+***Output***
+```
+Need expand tests to cover all state logic. Current tests only check check_guess(). Missing:
+
+parse_guess() edge cases
+update_score() calculations
+Attempt limits
+Game status transitions
+Invalid input handling
+Expand test file:
+
+Now refactor app.py to separate state logic. Add state manager to logic_utils.py:
+
+Edit logic_utils.py
+Added 46 lines
+Update app.py to use GameState. Replace session init (lines 92-105) and submit logic (lines 147-188):
+```
+Claude's suggestion of code refactoring was misleading as I requested purely automation.
+I understand the code migration being useful in the longrun, but it was not what I intended as I wanted to evaluate the current state, not add further improvements yet.
 
 ---
 

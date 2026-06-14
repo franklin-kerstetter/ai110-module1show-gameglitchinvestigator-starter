@@ -42,8 +42,11 @@ In addition to these, I was particularly bothered by the late updating of the re
 > Explain what fixes you applied.
 
 Most of the fixes for the [reflection: What was broken when you started?](reflection.md#1-what-was-broken-when-you-started) bugs were minor.
-For example, there was a state initialization line which set number of attempts to 1 rather than 0.
-There was also code which always pulled the random number from a 1-100 range rather than the range from the difficulty that was updated to get the difficulty's range using `get_range_for_difficulty` in [logic_utils.py](logic_utils.py).
+For example, there was a state initialization line which set [number of attempts to 1](https://github.com/codepath/ai110-module1show-gameglitchinvestigator-starter/blob/2a6e4245481ce54cce8681d351fe2487e4620e90/app.py#L96) rather than 0.
+I addressed this [here](https://github.com/franklin-kerstetter/ai110-module1-gameglitchinvestigator/blob/main/state_utils.py#L34) which works because it actually sets the initial value to 0.
+There was also code which always pulled the random number from a [1-100 range](https://github.com/codepath/ai110-module1show-gameglitchinvestigator-starter/blob/2a6e4245481ce54cce8681d351fe2487e4620e90/app.py#L136) rather than the difficulty's range that I updated [here](https://github.com/franklin-kerstetter/ai110-module1-gameglitchinvestigator/blob/main/state_utils.py#L31) to use `get_range_for_difficulty` in [logic_utils.py](https://github.com/franklin-kerstetter/ai110-module1-gameglitchinvestigator/blob/main/logic_utils.py#L4).
+This works because it correctly determines the range for the random value which is determined [here](https://github.com/franklin-kerstetter/ai110-module1-gameglitchinvestigator/blob/main/state_utils.py#L33) rather than always 1-100.
+
 
 The more complicated refactoring came from fixing the lagging value updates.
 This had to do with the widget rendering order, and, therefore, required reordering the widgets a bit and calling `rerun`.
